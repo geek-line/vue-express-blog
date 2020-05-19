@@ -1,25 +1,40 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import AdminNew from './views/AdminNew.vue'
+import AdminEdit from './views/AdminEdit.vue'
+import AdminArticles from './views/AdminArticles.vue'
+import StatusNotFound from './views/StatusNotFound.vue'
 
 Vue.use(Router)
 
 export default new Router({
-  // mode: 'history',
+  mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: Home
+      path: '/admin/new',
+      name: 'adminNew',
+      component: AdminNew,
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    }
+      path: '/admin/articles',
+      name: 'adminArticles',
+      component: AdminArticles,
+    },
+    {
+      path: '/admin/articles/:id',
+      name: 'adminEdit',
+      component: AdminEdit,
+    },
+    {
+      path: '/admin/edit',
+      name: 'adminEdit',
+      component: AdminEdit,
+    },
+    {
+      path: '*',
+      name: 'statusNotFound',
+      component: StatusNotFound,
+    },
   ]
 })
