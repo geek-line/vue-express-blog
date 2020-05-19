@@ -1,46 +1,16 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const mysql = require('mysql')
-const session = require('express-session')
-const app = express()
-require('dotenv').config()
-const env = process.env
+const adminRouter = express.Router()
 
-function createConnection() {
-    return mysql.createConnection({
-        host: 'localhost',
-        user: env.MYSQL_USER,
-        password: env.MYSQL_PASSWORD,
-        database: env.MYSQL_DATABASE
-    });
-}
-
-app.use(session({
-    secret: env.SESSION_PWD,
-    name: 'vue-express-blog',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        expires: new Date(Date.now() + (30 * 24 * 60 * 60 * 1000))
-    },
-}))
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-app.use(bodyParser.json()) 
-app.use('/img', express.static(__dirname + '/dist/img/'));
-app.use('/css', express.static(__dirname + '/dist/css/'));
-app.use('/js', express.static(__dirname + '/dist/js/'));
-app.get('/', (req, res) => res.sendFile(__dirname + '/dist/index.html'))
-
-app.get('/api/articles', function (req, res, next) {
+adminRouter.use((req, res, next) => {
     if (Boolean(req.session.authenticated)) {
         next()
     } else {
         res.sendStatus(403)
     }
-}, (req, res,) => {
+})
+
+adminRouter.get('/api/articles', (req, res) => {
+    console.log(req.session.authenticated)
+    console.log(req.session.cookie)
     const connection = createConnection()
     connection.query('SELECT id, title, content FROM articles', function (error, results, fields) {
         if (error) throw error;
@@ -49,13 +19,7 @@ app.get('/api/articles', function (req, res, next) {
     })
 })
 
-app.get('/api/articles/:id', function (req, res, next) {
-    if (Boolean(req.session.authenticated)) {
-        next()
-    } else {
-        res.sendStatus(403)
-    }
-}, (req, res) => {
+adminRouter.get('/api/articles/:id', (req, res) => {
     const connection = createConnection()
     const id = req.path.slice('/api/articles/'.length)
     connection.query('SELECT id, title, content FROM articles WHERE id = ?', id, function (error, results, fields) {
@@ -69,13 +33,7 @@ app.get('/api/articles/:id', function (req, res, next) {
     })
 })
 
-app.post('/api/articles', function (req, res, next) {
-    if (Boolean(req.session.authenticated)) {
-        next()
-    } else {
-        res.sendStatus(403)
-    }
-}, (req, res) => {
+adminRouter.post('/api/articles', (req, res) => {
     const connection = createConnection()
     let form = JSON.parse(req.body.json)
     connection.query('INSERT INTO articles SET ?', form, function (error, results, fields) {
@@ -85,13 +43,7 @@ app.post('/api/articles', function (req, res, next) {
     })
 })
 
-app.put('/api/articles/:id', function (req, res, next) {
-    if (Boolean(req.session.authenticated)) {
-        next()
-    } else {
-        res.sendStatus(403)
-    }
-}, (req, res) => {
+adminRouter.put('/api/articles/:id', (req, res) => {
     const connection = createConnection()
     const id = req.path.slice('/api/articles/'.length)
     let form = JSON.parse(req.body.json)
@@ -102,13 +54,7 @@ app.put('/api/articles/:id', function (req, res, next) {
     })
 })
 
-app.delete('/api/articles/:id', function (req, res, next) {
-    if (Boolean(req.session.authenticated)) {
-        next()
-    } else {
-        res.sendStatus(403)
-    }
-}, (req, res) => {
+adminRouter.delete('/api/articles/:id', (req, res) => {
     const connection = createConnection()
     const id = req.path.slice('/api/articles/'.length)
     connection.query('DELETE FROM articles WHERE id = ?', id, function (error, results, fields) {
@@ -118,19 +64,14 @@ app.delete('/api/articles/:id', function (req, res, next) {
     })
 })
 
-app.get('/api/auth', (req, res) => {
-    let isLogin = false
-    if (Boolean(req.session.authenticated)) {
-        isLogin = true
-    } 
-    res.send(isLogin)
-})
-
-app.get('/api/login', (req, res) => {
+adminRouter.get('/api/login', (req, res) => {
+    console.log(req.session.authenticated)
+    // console.log(req.session)
     return res.send(Boolean(req.session.authenticated))
 })
 
-app.post('/api/login', (req, res) => {
+adminRouter.post('/api/login', (req, res) => {
+    console.log(req.session.authenticated)
     const connection = createConnection()
     let form = JSON.parse(req.body.json)
     connection.query('SELECT email, password FROM admin_users WHERE email = ? AND password = ?', [form.email, form.password], function (error, results, fields) {
@@ -144,9 +85,9 @@ app.post('/api/login', (req, res) => {
     })
 })
 
-app.get('/api/logout', (req, res) => {
+adminRouter.get('/api/logout', (req, res) => {
     req.session.authenticated = false
     res.send(req.session.authenticated);
 })
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+module.exports = adminRouter

@@ -1,5 +1,6 @@
 <template>
 <div>
+  <page-header/>
   <h1>This is an new page</h1>
   <div>
     <p>タイトル</p>
@@ -7,13 +8,14 @@
   </div>
   <div>
     <p>コンテンツ</p>
-    <textarea cols='30' rows='10' v-model="content"></textarea>
+    <textarea cols='100' rows='10' v-model="content"></textarea>
   </div>
   <input type='submit' @click="postArticle">
 </div>
 </template>
 
 <script>
+import PageHeader from '@/components/PageHeader'
 export default {
   data(){
     return{
@@ -33,6 +35,13 @@ export default {
       })
       .catch(e => console.log(e))
     }
+  },
+  created(){
+    this.axios.get('/api/auth')
+    .catch(()=> this.$router.push({ name: 'adminLogin' }))
+  },
+  components:{
+    PageHeader
   }
 }
 </script>

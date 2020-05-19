@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <h1>
         お探しのページは見つかりませんでした。
-    </div>
+    </h1>
 </template>

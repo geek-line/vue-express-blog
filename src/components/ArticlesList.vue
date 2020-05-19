@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import PageHeader from '@/components/PageHeader'
 export default {
   name: 'ArticlesList',
   props: {
@@ -37,7 +38,7 @@ export default {
       .then((response)=>{
         this.articles = response.data
       })
-      .catch(e => console.log(e))
+      .catch(e => this.$router.push({ name: 'adminLogin' }))
     },
     deleteArticle:function(id){
       if(confirm("本当に削除しますか？")){
@@ -48,7 +49,7 @@ export default {
         .catch(e => console.log(e))
       }
     }
-  }
+  },
 }
 </script>
 

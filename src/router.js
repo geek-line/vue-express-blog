@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import AdminLogin from './views/AdminLogin.vue'
 import AdminNew from './views/AdminNew.vue'
 import AdminEdit from './views/AdminEdit.vue'
 import AdminArticles from './views/AdminArticles.vue'
@@ -11,6 +12,11 @@ export default new Router({
   // mode: 'history',
   base: process.env.BASE_URL,
   routes: [
+    {
+      path: '/admin/login',
+      name: 'adminLogin',
+      component: AdminLogin,
+    },
     {
       path: '/admin/new',
       name: 'adminNew',
