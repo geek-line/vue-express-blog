@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import AdminLogin from './views/AdminLogin.vue'
-import AdminNew from './views/AdminNew.vue'
-import AdminEdit from './views/AdminEdit.vue'
-import AdminArticles from './views/AdminArticles.vue'
-import StatusNotFound from './views/StatusNotFound.vue'
+import AdminLogin from '@/views/AdminLogin.vue'
+import AdminNew from '@/views/AdminNew.vue'
+import AdminEdit from '@/views/AdminEdit.vue'
+import AdminArticles from '@/views/AdminArticles.vue'
+import UserArticles from '@/views/UserArticles.vue'
+import UserDetail from '@/views/UserDetail.vue'
+import StatusNotFound from '@/views/StatusNotFound.vue'
 
 Vue.use(Router)
 
@@ -33,9 +35,14 @@ export default new Router({
       component: AdminEdit,
     },
     {
-      path: '/admin/edit',
-      name: 'adminEdit',
-      component: AdminEdit,
+      path: '/articles',
+      name: 'userArticles',
+      component: UserArticles,
+    },
+    {
+      path: '/articles/:id',
+      name: 'userDetail',
+      component: UserDetail,
     },
     {
       path: '*',

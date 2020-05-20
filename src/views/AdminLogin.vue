@@ -21,7 +21,7 @@ export default {
     },
     methods:{
         checkSession(){
-            this.axios.get('/api/login')
+            this.axios.get('/admin/api/login')
             .then((response)=>{
                 if (response.data){
                     this.$router.push({name: 'adminArticles'})
@@ -34,7 +34,7 @@ export default {
                 email:this.email,
                 password:this.password,
             })
-            this.axios.post('/api/login', {json: json})
+            this.axios.post('/admin/api/login', {json: json})
             .then((response)=>{
                 this.$router.push({name: 'adminArticles'})
             })

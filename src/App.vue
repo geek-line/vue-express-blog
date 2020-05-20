@@ -9,11 +9,14 @@ body{
   margin: 0;
 }
 
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+.edit-container{
+  margin: 1rem 2rem;
 }
+
+.basic-page{
+  height: 100%;
+  width: 100%;
+  background-color:#c8e6c9;
+}
+
 </style>

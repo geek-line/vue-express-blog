@@ -1,8 +1,10 @@
 <template>
-<div>
+<div class="basic-page">
   <page-header/>
-  <h1>This is an articles page</h1>
-  <articles-list />
+  <div class='edit-container'>
+    <h1>This is an articles page</h1>
+    <articles-list />
+  </div>
 </div>
 </template>
 
@@ -16,7 +18,7 @@ export default {
     ArticlesList,PageHeader
   },
   created(){
-    this.axios.get('/api/auth')
+    this.axios.get('/admin/api/auth')
     .catch(()=> this.$router.push({ name: 'adminLogin' }))
   }
 }

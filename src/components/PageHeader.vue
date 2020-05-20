@@ -1,13 +1,13 @@
 <template>
     <div id="nav">
-      <page-header/>
       <template v-if="isLogin">
-        <router-link to="/admin/articles">Articles</router-link> |
-        <router-link to="/admin/new">NewArticle</router-link> |
-        <a href="" @click="logout">logout</a>
+        <router-link to="/admin/articles">管理画面</router-link> |
+        <router-link to="/admin/new">新規作成</router-link> |
+        <a href="" @click="logout">ログアウト</a> |
+        <router-link to="/articles">記事一覧</router-link>
       </template>
       <template v-else>
-        <router-link to="/admin/login">login</router-link>
+        <router-link to="/articles">記事一覧</router-link>
       </template>
     </div>
 </template>
@@ -22,23 +22,20 @@ export default {
   },
   methods:{
     logout:function(){
-      this.axios.get('/api/logout')
+      this.axios.get('/admin/api/logout')
       .then((response)=>{
         this.$router.push({name: 'adminLogin'})
       })
     }
   },
   created(){
-    this.axios.get('/api/auth')
+    this.axios.get('/admin/api/auth')
     .then((response)=>{
       if(response.data){
         this.isLogin = true
       }
     })
     .catch(()=> this.$router.push({ name: 'adminLogin' }))
-  },
-  components:{
-    PageHeader
   },
 }
 </script>
