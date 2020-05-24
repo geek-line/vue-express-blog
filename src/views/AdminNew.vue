@@ -16,12 +16,14 @@
     </div>
     <input type='submit' @click="postArticle">
   </div>
+  <page-footer></page-footer>
 </div>
 </template>
 
 <script>
 import Editor from '@tinymce/tinymce-vue'
 import PageHeader from '@/components/PageHeader'
+import PageFooter from '@/components/PageFooter'
 export default {
   data(){
     return{
@@ -54,7 +56,8 @@ export default {
   },
   components:{
     'page-header': PageHeader,
-    'editor': Editor
+    'editor': Editor,
+    PageFooter,
   }
 }
 </script>

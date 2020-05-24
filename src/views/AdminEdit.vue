@@ -22,11 +22,13 @@
             <h1>お探しのページは見つかりません</h1>
         </div>
     </div>
+    <page-footer></page-footer>
 </div>
 </template>
 
 <script>
 import PageHeader from '@/components/PageHeader'
+import PageFooter from '@/components/PageFooter'
 import Editor from '@tinymce/tinymce-vue'
 export default {
     data(){
@@ -77,7 +79,7 @@ export default {
         }
     },
     components:{
-        PageHeader,Editor
+        PageHeader,Editor,PageFooter
     }
 }
 </script>

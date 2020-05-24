@@ -8,6 +8,12 @@
 body{
   margin: 0;
 }
+.container{
+  margin: 2rem 6rem;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 10px;
+}
 
 .edit-container{
   margin: 1rem 2rem;

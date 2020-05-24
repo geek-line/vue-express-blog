@@ -4,11 +4,13 @@
         <input type='email' v-model="email">
         <input type='password' v-model="password">
         <input type='submit' @click="postPassword">
+        <page-footer></page-footer>
     </div>
 </template>
 
 <script>
 import PageHeader from '@/components/PageHeader'
+import PageFooter from '@/components/PageFooter'
 export default {
     data(){
         return{
@@ -42,7 +44,7 @@ export default {
         }
     },
     components:{
-        PageHeader
+        PageHeader,PageFooter
     },
 }
 </script>
