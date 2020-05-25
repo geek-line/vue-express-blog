@@ -45,6 +45,11 @@ export default new Router({
       component: UserDetail,
     },
     {
+      path: '/',
+      name: 'userArticles',
+      component: UserArticles,
+    },
+    {
       path: '*',
       name: 'statusNotFound',
       component: StatusNotFound,

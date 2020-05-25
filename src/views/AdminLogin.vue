@@ -1,9 +1,19 @@
 <template>
     <div>
         <page-header/>
-        <input type='email' v-model="email">
-        <input type='password' v-model="password">
-        <input type='submit' @click="postPassword">
+        <div class='container'>
+            <h1>管理者ログイン</h1>
+            <div>
+                <p>Email</p>
+                <input type='email' v-model="email">
+            </div>
+            <div>
+                <p>パスワード</p>
+                <input type='password' v-model="password">
+            </div>
+            <br>
+            <input type='submit' @click="postPassword">
+        </div>
         <page-footer></page-footer>
     </div>
 </template>
@@ -23,7 +33,7 @@ export default {
     },
     methods:{
         checkSession(){
-            this.axios.get('/admin/api/login')
+            this.axios.get('/admin/api/auth')
             .then((response)=>{
                 if (response.data){
                     this.$router.push({name: 'adminArticles'})

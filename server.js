@@ -43,7 +43,7 @@ app.get('/admin/api/articles', function (req, res, next) {
     }
 }, (req, res, ) => {
         const connection = createConnection()
-        connection.query('SELECT id, title, content FROM articles', function (error, results, fields) {
+        connection.query('SELECT id, title, is_published FROM articles', function (error, results, fields) {
             if (error) throw error;
             res.send(results);
             connection.destroy()
@@ -103,6 +103,22 @@ app.put('/admin/api/articles/:id', function (req, res, next) {
     })
 })
 
+app.put('/admin/api/articles/is_published/:id', function (req, res, next) {
+    if (Boolean(req.session.authenticated)) {
+        next()
+    } else {
+        res.sendStatus(403)
+    }
+}, (req, res) => {
+        const connection = createConnection()
+        const id = req.params.id
+        connection.query('UPDATE articles SET is_published = true WHERE id = ?', id, function (error, result, filelds) { 
+            if (error) throw error;
+            res.send("ok");
+            connection.destroy()
+        })
+})
+
 app.delete('/admin/api/articles/:id', function (req, res, next) {
     if (Boolean(req.session.authenticated)) {
         next()
@@ -116,6 +132,22 @@ app.delete('/admin/api/articles/:id', function (req, res, next) {
             if (error) throw error;
             res.send(results[0]);
             connection.destroy()
+    })
+})
+
+app.delete('/admin/api/articles/is_published/:id', function (req, res, next) {
+    if (Boolean(req.session.authenticated)) {
+        next()
+    } else {
+        res.sendStatus(403)
+    }
+}, (req, res) => {
+    const connection = createConnection()
+    const id = req.params.id
+    connection.query('UPDATE articles SET is_published = false WHERE id = ?', id, function (error, result, filelds) {
+        if (error) throw error;
+        res.send("ok");
+        connection.destroy()
     })
 })
 

@@ -5,12 +5,17 @@
         <th>id</th>
         <th>title</th>
         <th>編集</th>
+        <th>公開</th>
         <th>削除</th>
       </tr>
       <tr v-for="article in articles" v-bind:key=article.id>
         <th>{{article.id}}</th>
         <th>{{article.title}}</th>
         <th><router-link :to="{name:'adminEdit',params:{id:article.id}}">この記事を編集</router-link></th>
+        <th>
+          <a v-if="article.is_published" @click="setPrivate(article.id)">この記事を非公開</a>
+          <a v-else @click="setPublic(article.id)">この記事を公開</a>
+        </th>
         <th><a @click="deleteArticle(article.id)">この記事を削除</a></th>
       </tr>
     </table>
@@ -21,12 +26,9 @@
 import PageHeader from '@/components/PageHeader'
 export default {
   name: 'ArticlesList',
-  props: {
-    msg: String
-  },
   data:function(){
     return{
-      articles:[]
+      articles: Array
     }
   },
   created(){
@@ -47,6 +49,24 @@ export default {
           this.getAllArticles()
         })
         .catch(e => console.log(e))
+      }
+    },
+    setPublic:function(id){
+      if(confirm("この記事を公開しますか?")){
+        this.axios.put('/admin/api/articles/is_published/'+id, null)
+        .then((response)=>{
+          this.getAllArticles()
+        })
+        .catch((e)=>console.log(e))
+      }
+    },
+    setPrivate:function(id){
+      if(confirm("この記事を非公開にしますか?")){
+        this.axios.delete('/admin/api/articles/is_published/'+id)
+        .then((response)=>{
+          this.getAllArticles()
+        })
+        .catch((e)=>console.log(e))
       }
     }
   },

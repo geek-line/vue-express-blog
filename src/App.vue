@@ -8,6 +8,10 @@
 body{
   margin: 0;
 }
+a{
+  cursor: pointer;
+  text-decoration: none;
+}
 .container{
   margin: 2rem 6rem;
   padding: 1rem;

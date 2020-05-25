@@ -3,7 +3,7 @@
       <template v-if="isLogin">
         <router-link to="/admin/articles">管理画面</router-link> |
         <router-link to="/admin/new">新規作成</router-link> |
-        <a href="" @click="logout">ログアウト</a> |
+        <a @click="logout">ログアウト</a> |
         <router-link to="/articles">記事一覧</router-link>
       </template>
       <template v-else>
@@ -24,7 +24,7 @@ export default {
     logout:function(){
       this.axios.get('/admin/api/logout')
       .then((response)=>{
-        this.$router.push({name: 'adminLogin'})
+        this.$router.push({ name: 'adminLogin' })
       })
     }
   },
