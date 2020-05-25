@@ -43,7 +43,7 @@ export default {
         title:this.title,
         content:this.content
       })
-      this.axios.post('/admin/api/articles', {json:json})
+      this.axios.post('/api/admin/articles', {json:json})
       .then((response) => {
         this.$router.push({ name: 'adminArticles' })
       })
@@ -51,7 +51,7 @@ export default {
     }
   },
   created(){
-    this.axios.get('/admin/api/auth')
+    this.axios.get('/api/admin/auth')
     .catch(()=> this.$router.push({ name: 'adminLogin' }))
   },
   components:{

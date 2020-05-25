@@ -10,11 +10,11 @@
   "dependencies": {
     "@tinymce/tinymce-vue": "^3.2.1",
     "axios": "^0.19.2",
+    "cookie-session": "^1.4.0",
     "core-js": "^2.6.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-session": "^1.17.1",
     "mysql": "^2.18.1",
     "tinymce": "^5.2.2",
     "vue": "^2.6.10",

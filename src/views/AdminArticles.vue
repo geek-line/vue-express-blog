@@ -19,7 +19,7 @@ export default {
     ArticlesList,PageHeader,PageFooter
   },
   created(){
-    this.axios.get('/admin/api/auth')
+    this.axios.get('/api/admin/auth')
     .catch(()=> this.$router.push({ name: 'adminLogin' }))
   }
 }

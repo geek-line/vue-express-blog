@@ -22,14 +22,14 @@ export default {
   },
   methods:{
     logout:function(){
-      this.axios.get('/admin/api/logout')
+      this.axios.get('/api/admin/logout')
       .then((response)=>{
         this.$router.push({ name: 'adminLogin' })
       })
     }
   },
   created(){
-    this.axios.get('/admin/api/auth')
+    this.axios.get('/api/admin/auth')
     .then((response)=>{
       if(response.data){
         this.isLogin = true

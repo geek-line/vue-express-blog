@@ -48,14 +48,14 @@ export default {
         }
     },
     created(){
-        this.axios.get('/admin/api/auth')
+        this.axios.get('/api/admin/auth')
         .catch(()=> this.$router.push({ name: 'adminLogin' }))
         this.contentId = this.$route.path.slice("/admin/articles/".length)
         this.getArticle()
     },
     methods:{
         getArticle:function(){
-            this.axios.get('/admin/api/articles/'+this.contentId)
+            this.axios.get('/api/admin/articles/'+this.contentId)
             .then((response)=>{
                 this.title = response.data.title
                 this.content = response.data.content
@@ -71,7 +71,7 @@ export default {
                 title:this.title,
                 content:this.content
             })
-            this.axios.put('/admin/api/articles/'+this.contentId, {json:json})
+            this.axios.put('/api/admin/articles/'+this.contentId, {json:json})
             .then((response) => {
                 this.$router.push({ name: 'adminArticles' })
             })

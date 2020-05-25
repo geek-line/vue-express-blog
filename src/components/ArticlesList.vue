@@ -36,7 +36,7 @@ export default {
   },
   methods:{
     getAllArticles:function(){
-      this.axios.get('/admin/api/articles')
+      this.axios.get('/api/admin/articles')
       .then((response)=>{
         this.articles = response.data
       })
@@ -44,7 +44,7 @@ export default {
     },
     deleteArticle:function(id){
       if(confirm("本当に削除しますか？")){
-        this.axios.delete('/admin/api/articles/'+id)
+        this.axios.delete('/api/admin/articles/'+id)
         .then((response) => {
           this.getAllArticles()
         })
@@ -53,7 +53,7 @@ export default {
     },
     setPublic:function(id){
       if(confirm("この記事を公開しますか?")){
-        this.axios.put('/admin/api/articles/is_published/'+id, null)
+        this.axios.put('/api/admin/articles/is_published/'+id, null)
         .then((response)=>{
           this.getAllArticles()
         })
@@ -62,7 +62,7 @@ export default {
     },
     setPrivate:function(id){
       if(confirm("この記事を非公開にしますか?")){
-        this.axios.delete('/admin/api/articles/is_published/'+id)
+        this.axios.delete('/api/admin/articles/is_published/'+id)
         .then((response)=>{
           this.getAllArticles()
         })

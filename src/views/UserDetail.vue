@@ -31,7 +31,7 @@ export default {
     },
     methods:{
         getArticle:function(){
-            this.axios.get('/user/api/articles/'+this.contentId)
+            this.axios.get('/api/user/articles/'+this.contentId)
             .then((response)=>{
                 this.title = response.data.title
                 this.content = response.data.content

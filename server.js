@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mysql = require('mysql')
-const session = require('express-session')
+const session = require('cookie-session')
 const app = express()
 require('dotenv').config()
 const env = process.env
@@ -35,28 +35,45 @@ app.use('/js', express.static(__dirname + '/dist/js/'));
 app.use('/node_modules', express.static(__dirname + '/node_modules/'))
 app.get('/', (req, res) => res.sendFile(__dirname + '/dist/index.html'))
 
-app.get('/admin/api/articles', function (req, res, next) {
-    if (Boolean(req.session.authenticated)) {
-        next()
-    } else {
-        res.sendStatus(403)
-    }
-}, (req, res, ) => {
+app.route('/api/admin/articles')
+    .get(function (req, res, next) {
+        if (Boolean(req.session.authenticated)) {
+            next()
+        } else {
+            res.sendStatus(403)
+        }
+    }, (req, res, ) => {
         const connection = createConnection()
         connection.query('SELECT id, title, is_published FROM articles', function (error, results, fields) {
             if (error) throw error;
             res.send(results);
             connection.destroy()
         })
-})
+    })
+    .post(function (req, res, next) {
+        if (Boolean(req.session.authenticated)) {
+            next()
+        } else {
+            res.sendStatus(403)
+        }
+    }, (req, res) => {
+        const connection = createConnection()
+        let form = JSON.parse(req.body.json)
+        connection.query('INSERT INTO articles SET ?', form, function (error, results, fields) {
+            if (error) throw error;
+            res.send(results[0]);
+            connection.destroy()
+        })
+    })
 
-app.get('/admin/api/articles/:id', function (req, res, next) {
-    if (Boolean(req.session.authenticated)) {
-        next()
-    } else {
-        res.sendStatus(403)
-    }
-}, (req, res) => {
+app.route('/api/admin/articles/:id')
+    .get(function (req, res, next) {
+        if (Boolean(req.session.authenticated)) {
+            next()
+        } else {
+            res.sendStatus(403)
+        }
+    }, (req, res) => {
         const connection = createConnection()
         const id = req.params.id
         connection.query('SELECT id, title, content FROM articles WHERE id = ?', id, function (error, results, fields) {
@@ -68,31 +85,14 @@ app.get('/admin/api/articles/:id', function (req, res, next) {
             res.send(results[0]);
             connection.destroy()
         })
-})
-
-app.post('/admin/api/articles', function (req, res, next) {
-    if (Boolean(req.session.authenticated)) {
-        next()
-    } else {
-        res.sendStatus(403)
-    }
-}, (req, res) => {
-        const connection = createConnection()
-        let form = JSON.parse(req.body.json)
-        connection.query('INSERT INTO articles SET ?', form, function (error, results, fields) {
-            if (error) throw error;
-            res.send(results[0]);
-            connection.destroy()
     })
-})
-
-app.put('/admin/api/articles/:id', function (req, res, next) {
-    if (Boolean(req.session.authenticated)) {
-        next()
-    } else {
-        res.sendStatus(403)
-    }
-}, (req, res) => {
+    .put(function (req, res, next) {
+        if (Boolean(req.session.authenticated)) {
+            next()
+        } else {
+            res.sendStatus(403)
+        }
+    }, (req, res) => {
         const connection = createConnection()
         const id = req.params.id
         let form = JSON.parse(req.body.json)
@@ -100,58 +100,75 @@ app.put('/admin/api/articles/:id', function (req, res, next) {
             if (error) throw error;
             res.send(results[0]);
             connection.destroy()
-    })
-})
-
-app.put('/admin/api/articles/is_published/:id', function (req, res, next) {
-    if (Boolean(req.session.authenticated)) {
-        next()
-    } else {
-        res.sendStatus(403)
-    }
-}, (req, res) => {
-        const connection = createConnection()
-        const id = req.params.id
-        connection.query('UPDATE articles SET is_published = true WHERE id = ?', id, function (error, result, filelds) { 
-            if (error) throw error;
-            res.send("ok");
-            connection.destroy()
         })
-})
-
-app.delete('/admin/api/articles/:id', function (req, res, next) {
-    if (Boolean(req.session.authenticated)) {
-        next()
-    } else {
-        res.sendStatus(403)
-    }
-}, (req, res) => {
+    })
+    .delete(function (req, res, next) {
+        if (Boolean(req.session.authenticated)) {
+            next()
+        } else {
+            res.sendStatus(403)
+        }
+    }, (req, res) => {
         const connection = createConnection()
         const id = req.params.id
         connection.query('DELETE FROM articles WHERE id = ?', id, function (error, results, fields) {
             if (error) throw error;
             res.send(results[0]);
             connection.destroy()
+        })
     })
-})
 
-app.delete('/admin/api/articles/is_published/:id', function (req, res, next) {
-    if (Boolean(req.session.authenticated)) {
-        next()
-    } else {
-        res.sendStatus(403)
-    }
-}, (req, res) => {
-    const connection = createConnection()
-    const id = req.params.id
-    connection.query('UPDATE articles SET is_published = false WHERE id = ?', id, function (error, result, filelds) {
-        if (error) throw error;
-        res.send("ok");
-        connection.destroy()
+app.route('/api/admin/login')
+    .get((req, res) => {
+        return res.send(Boolean(req.session.authenticated))
     })
-})
+    .post((req, res) => {
+        const connection = createConnection()
+        let form = JSON.parse(req.body.json)
+        connection.query('SELECT email, password FROM admin_users WHERE email = ? AND password = ?', [form.email, form.password], function (error, results, fields) {
+            if (error) throw error;
+            if (!results[0]) {
+                res.sendStatus(404)
+                return
+            }
+            req.session.authenticated = true
+            res.send(req.session.authenticated);
+        })
+    })
 
-app.get('/admin/api/auth', (req, res) => {
+app.route('/api/admin/articles/is_published/:id')
+    .put(function (req, res, next) {
+        if (Boolean(req.session.authenticated)) {
+            next()
+        } else {
+            res.sendStatus(403)
+        }
+    }, (req, res) => {
+        const connection = createConnection()
+        const id = req.params.id
+        connection.query('UPDATE articles SET is_published = true WHERE id = ?', id, function (error, result, filelds) {
+            if (error) throw error;
+            res.send("ok");
+            connection.destroy()
+        })
+    })
+    .delete(function (req, res, next) {
+        if (Boolean(req.session.authenticated)) {
+            next()
+        } else {
+            res.sendStatus(403)
+        }
+    }, (req, res) => {
+        const connection = createConnection()
+        const id = req.params.id
+        connection.query('UPDATE articles SET is_published = false WHERE id = ?', id, function (error, result, filelds) {
+            if (error) throw error;
+            res.send("ok");
+            connection.destroy()
+        })
+    })
+
+app.get('/api/admin/auth', (req, res) => {
     let isLogin = false
     if (Boolean(req.session.authenticated)) {
         isLogin = true
@@ -159,30 +176,12 @@ app.get('/admin/api/auth', (req, res) => {
     res.send(isLogin)
 })
 
-app.get('/admin/api/login', (req, res) => {
-    return res.send(Boolean(req.session.authenticated))
-})
-
-app.post('/admin/api/login', (req, res) => {
-    const connection = createConnection()
-    let form = JSON.parse(req.body.json)
-    connection.query('SELECT email, password FROM admin_users WHERE email = ? AND password = ?', [form.email, form.password], function (error, results, fields) {
-        if (error) throw error;
-        if (!results[0]) {
-            res.sendStatus(404)
-            return
-        }
-        req.session.authenticated = true
-        res.send(req.session.authenticated);
-    })
-})
-
-app.get('/admin/api/logout', (req, res) => {
+app.get('/api/admin/logout', (req, res) => {
     req.session.authenticated = false
     res.send(req.session.authenticated);
 })
 
-app.get('/user/api/articles', (req, res) => {
+app.get('/api/user/articles', (req, res) => {
     const connection = createConnection()
     connection.query('SELECT id, title, created_at FROM articles WHERE is_published = true', function (error, results, fields) {
         if (error) throw error;
@@ -195,7 +194,7 @@ app.get('/user/api/articles', (req, res) => {
     })
 })
 
-app.get('/user/api/articles/:id', (req, res) => {
+app.get('/api/user/articles/:id', (req, res) => {
     const connection = createConnection()
     const id = req.params.id
     connection.query('SELECT id, title, content, created_at FROM articles WHERE id = ? AND is_published = true', id, function (error, results, fields) {
