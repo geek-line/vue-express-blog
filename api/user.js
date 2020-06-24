@@ -21,7 +21,7 @@ router.use(bodyParser.urlencoded({
 }));
 router.use(bodyParser.json())
 router.use(function timeLog(req, res, next) {
-    if (Boolean(req.session.authenticated)) {
+    if (req.session.authenticated) { // Boolean(...) は使うべきではない
         console.log('Time: ', Date.now())
         next()
     } else {
@@ -46,7 +46,7 @@ router.use(function timeLog(req, res, next) {
 
 router.get('articles', (req, res) => {
     const connection = createConnection()
-    connection.query('SELECT id, title, created_at FROM articles WHERE is_published = true', function (error, results, fields) {
+    connection.query('SELECT id, title, created_at FROM articles WHERE is_published = true', function (error, results) {
         if (error) throw error;
         if (!results) {
             res.sendStatus(404)
@@ -60,7 +60,7 @@ router.get('articles', (req, res) => {
 router.get('articles/:id', (req, res) => {
     const connection = createConnection()
     const id = req.params.id
-    connection.query('SELECT id, title, content, created_at FROM articles WHERE id = ? AND is_published = true', id, function (error, results, fields) {
+    connection.query('SELECT id, title, content, created_at FROM articles WHERE id = ? AND is_published = true', id, function (error, results) {
         if (error) throw error;
         if (!results[0]) {
             res.sendStatus(404)

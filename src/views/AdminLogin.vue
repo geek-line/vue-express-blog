@@ -47,10 +47,10 @@ export default {
                 password:this.password,
             })
             this.axios.post('/api/admin/login', {json: json})
-            .then((response)=>{
+            .then(()=>{
                 this.$router.push({name: 'adminArticles'})
             })
-            .catch(e => alert('emailとpasswordのどちらかまたは両方が間違っています'))
+            .catch(() => alert('emailとpasswordのどちらかまたは両方が間違っています'))
         }
     },
     components:{

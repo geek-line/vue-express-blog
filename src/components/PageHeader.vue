@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import PageHeader from '@/components/PageHeader'
 export default {
   data(){
     return{
@@ -23,7 +22,7 @@ export default {
   methods:{
     logout:function(){
       this.axios.get('/api/admin/logout')
-      .then((response)=>{
+      .then(()=>{
         this.$router.push({ name: 'adminLogin' })
       })
     }

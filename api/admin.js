@@ -19,9 +19,9 @@ router.use(session({
 router.use(bodyParser.urlencoded({
     extended: true
 }));
-router.use(bodyParser.json()) 
+router.use(bodyParser.json())
 router.use(function timeLog(req, res, next) {
-    if (Boolean(req.session.authenticated)) {
+    if (req.session.authenticated) {
         console.log('Time: ', Date.now())
         next()
     } else {
@@ -41,7 +41,7 @@ function createConnection() {
 
 router.get('/articles', (req, res, ) => {
     const connection = createConnection()
-    connection.query('SELECT id, title, is_published FROM articles', function (error, results, fields) {
+    connection.query('SELECT id, title, is_published FROM articles', function (error, results) {
         if (error) throw error;
         connection.destroy()
         return res.send(results);
@@ -51,7 +51,7 @@ router.get('/articles', (req, res, ) => {
 router.get('/articles/:id', (req, res) => {
     const connection = createConnection()
     const id = req.params.id
-    connection.query('SELECT id, title, content FROM articles WHERE id = ?', id, function (error, results, fields) {
+    connection.query('SELECT id, title, content FROM articles WHERE id = ?', id, function (error, results) {
         if (error) throw error;
         if (!results[0]) {
             return res.sendStatus(404)
@@ -64,7 +64,7 @@ router.get('/articles/:id', (req, res) => {
 router.post('/articles', (req, res) => {
     const connection = createConnection()
     let form = JSON.parse(req.body.json)
-    connection.query('INSERT INTO articles SET ?', form, function (error, results, fields) {
+    connection.query('INSERT INTO articles SET ?', form, function (error, results) {
         if (error) throw error;
         connection.destroy()
         return res.send(results[0]);
@@ -75,7 +75,7 @@ router.put('/articles/:id', (req, res) => {
     const connection = createConnection()
     const id = req.params.id
     let form = JSON.parse(req.body.json)
-    connection.query('UPDATE articles SET ? WHERE id = ?', [form, id], function (error, results, fields) {
+    connection.query('UPDATE articles SET ? WHERE id = ?', [form, id], function (error, results) {
         if (error) throw error;
         connection.destroy()
         return res.send(results[0]);
@@ -85,17 +85,17 @@ router.put('/articles/:id', (req, res) => {
 router.put('/articles/is_published/:id', (req, res) => {
     const connection = createConnection()
     const id = req.params.id
-    connection.query('UPDATE articles SET is_published = true WHERE id = ?', id, function (error, result, filelds) {
+    connection.query('UPDATE articles SET is_published = true WHERE id = ?', id, function (error) {
         if (error) throw error;
         connection.destroy()
-        return res.send("ok");   
+        return res.send("ok");
     })
 })
 
 router.delete('/articles/:id', (req, res) => {
     const connection = createConnection()
     const id = req.params.id
-    connection.query('DELETE FROM articles WHERE id = ?', id, function (error, results, fields) {
+    connection.query('DELETE FROM articles WHERE id = ?', id, function (error, results) {
         if (error) throw error;
         connection.destroy()
         return res.send(results[0]);
@@ -105,7 +105,7 @@ router.delete('/articles/:id', (req, res) => {
 router.delete('/articles/is_published/:id', (req, res) => {
     const connection = createConnection()
     const id = req.params.id
-    connection.query('UPDATE articles SET is_published = false WHERE id = ?', id, function (error, result, filelds) {
+    connection.query('UPDATE articles SET is_published = false WHERE id = ?', id, function (error) {
         if (error) throw error;
         connection.destroy()
         return res.send("ok");
@@ -114,21 +114,21 @@ router.delete('/articles/is_published/:id', (req, res) => {
 
 router.get('/auth', (req, res) => {
     let isLogin = false
-    if (Boolean(req.session.authenticated)) {
+    if (req.session.authenticated) {
         isLogin = true
     }
     return res.send(isLogin)
 })
 
 router.get('/login', (req, res) => {
-    return res.send(Boolean(req.session.authenticated))
+    return res.send(req.session.authenticated)
 })
 
 router.post('/login', (req, res) => {
     const connection = createConnection()
     let form = JSON.parse(req.body.json)
     console.log(form)
-    connection.query('SELECT email, password FROM admin_users WHERE email = ? AND password = ?', [form.email, form.password], function (error, results, fields) {
+    connection.query('SELECT email, password FROM admin_users WHERE email = ? AND password = ?', [form.email, form.password], function (error, results) {
         if (error) throw error;
         if (!results[0]) {
             return res.sendStatus(404)

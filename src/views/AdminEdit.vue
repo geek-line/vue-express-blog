@@ -41,7 +41,7 @@ export default {
                 height: 500,
                 menubar: false,
                 tinycomments_mode: 'embedded',
-                tinycomments_author: 'Author name', 
+                tinycomments_author: 'Author name',
                 plugins: 'link image lists table',
                 toolbar: 'undo redo | styleselect | link bold italic | image | numlist bullist | table tabledelete',
             }
@@ -72,7 +72,7 @@ export default {
                 content:this.content
             })
             this.axios.put('/api/admin/articles/'+this.contentId, {json:json})
-            .then((response) => {
+            .then(() => {
                 this.$router.push({ name: 'adminArticles' })
             })
             .catch(e => console.log(e))

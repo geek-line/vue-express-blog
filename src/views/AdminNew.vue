@@ -44,7 +44,7 @@ export default {
         content:this.content
       })
       this.axios.post('/api/admin/articles', {json:json})
-      .then((response) => {
+      .then(() => {
         this.$router.push({ name: 'adminArticles' })
       })
       .catch(e => console.log(e))
