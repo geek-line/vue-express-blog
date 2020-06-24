@@ -142,7 +142,7 @@ app.route('/api/admin/articles/:id')
                 path: '/articles/' + id,
                 method: 'DELETE',
             };
-            const jsonReq = http.request(options, function (response) {
+            http.request(options, function (response) {
                 let str = '';
                 response.on('data', function (chunk) {
                     str += chunk;
