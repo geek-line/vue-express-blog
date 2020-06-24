@@ -26,7 +26,7 @@ export default {
   name: 'ArticlesList',
   data: function() {
     return {
-      articles: Array,
+      articles: [],
     }
   },
   created() {

@@ -24,7 +24,7 @@ import Editor from '@tinymce/tinymce-vue'
 export default {
   data() {
     return {
-      contentId: Number,
+      contentId: null,
       title: '',
       content: '',
       isFound: true,
