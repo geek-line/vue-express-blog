@@ -10,11 +10,12 @@ import ArticlesList from '@/components/ArticlesList.vue'
 export default {
   name: 'adminArticle',
   components: {
-    ArticlesList
+    ArticlesList,
   },
-  created(){
-    this.axios.get('/api/admin/auth')
-    .catch(()=> this.$router.push({ name: 'adminLogin' }))
-  }
+  created() {
+    this.axios
+      .get('/api/admin/auth')
+      .catch(() => this.$router.push({ name: 'adminLogin' }))
+  },
 }
 </script>

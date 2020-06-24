@@ -14,27 +14,27 @@
 
 <script>
 export default {
-  data(){
-    return{
-      isLogin: false
+  data() {
+    return {
+      isLogin: false,
     }
   },
-  methods:{
-    logout:function(){
-      this.axios.get('/api/admin/logout')
-      .then(()=>{
+  methods: {
+    logout: function() {
+      this.axios.get('/api/admin/logout').then(() => {
         this.$router.push({ name: 'adminLogin' })
       })
-    }
+    },
   },
-  created(){
-    this.axios.get('/api/admin/auth')
-    .then((response)=>{
-      if(response.data){
-        this.isLogin = true
-      }
-    })
-    .catch(()=> this.$router.push({ name: 'adminLogin' }))
+  created() {
+    this.axios
+      .get('/api/admin/auth')
+      .then(response => {
+        if (response.data) {
+          this.isLogin = true
+        }
+      })
+      .catch(() => this.$router.push({ name: 'adminLogin' }))
   },
 }
 </script>

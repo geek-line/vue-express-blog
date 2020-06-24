@@ -1,12 +1,12 @@
 <template>
   <div class="app">
-    <page-header/>
+    <page-header />
     <div class="main-wrapper">
       <div class="main">
-        <router-view/>
+        <router-view />
       </div>
     </div>
-    <page-footer/>
+    <page-footer />
   </div>
 </template>
 
@@ -17,8 +17,8 @@ import PageFooter from '@/components/PageFooter'
 export default {
   components: {
     PageHeader,
-    PageFooter
-  }
+    PageFooter,
+  },
 }
 </script>
 
