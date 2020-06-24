@@ -1,19 +1,13 @@
 <template>
-    <div class="basic-page">
-        <page-header></page-header>
-        <div class='container'>
-            <h2>掲載記事一覧</h2>
-            <div class="card-wrapper" v-for="article in articles" :key="article.id">
-                <router-link class="title" :to="{name:'userDetail',params:{id:article.id}}">{{ article.title }}</router-link>
-            </div>
+    <div>
+        <h2>掲載記事一覧</h2>
+        <div class="card-wrapper" v-for="article in articles" :key="article.id">
+            <router-link class="title" :to="{name:'userDetail',params:{id:article.id}}">{{ article.title }}</router-link>
         </div>
-        <page-footer></page-footer>
     </div>
 </template>
 
 <script>
-import PageHeader from '@/components/PageHeader'
-import PageFooter from '@/components/PageFooter'
 export default {
     data(){
         return{
@@ -30,9 +24,6 @@ export default {
         })
         .catch(e => console.log(e))
     },
-    components:{
-        PageHeader,PageFooter,
-    }
 }
 </script>
 

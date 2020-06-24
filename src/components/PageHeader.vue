@@ -1,15 +1,15 @@
 <template>
-    <div id="nav">
-      <template v-if="isLogin">
-        <router-link to="/admin/articles">管理画面</router-link> |
-        <router-link to="/admin/new">新規作成</router-link> |
-        <a @click="logout">ログアウト</a> |
-        <router-link to="/articles">記事一覧</router-link>
-      </template>
-      <template v-else>
-        <router-link to="/articles">記事一覧</router-link>
-      </template>
-    </div>
+  <div id="nav">
+    <template v-if="isLogin">
+      <router-link to="/admin/articles">管理画面</router-link> |
+      <router-link to="/admin/new">新規作成</router-link> |
+      <a @click="logout">ログアウト</a> |
+      <router-link to="/articles">記事一覧</router-link>
+    </template>
+    <template v-else>
+      <router-link to="/articles">記事一覧</router-link>
+    </template>
+  </div>
 </template>
 
 <script>

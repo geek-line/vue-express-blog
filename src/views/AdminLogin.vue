@@ -1,26 +1,20 @@
 <template>
     <div>
-        <page-header/>
-        <div class='container'>
-            <h1>管理者ログイン</h1>
-            <div>
-                <p>Email</p>
-                <input type='email' v-model="email">
-            </div>
-            <div>
-                <p>パスワード</p>
-                <input type='password' v-model="password">
-            </div>
-            <br>
-            <input type='submit' @click="postPassword">
+        <h1>管理者ログイン</h1>
+        <div>
+            <p>Email</p>
+            <input type='email' v-model="email">
         </div>
-        <page-footer></page-footer>
+        <div>
+            <p>パスワード</p>
+            <input type='password' v-model="password">
+        </div>
+        <br>
+        <input type='submit' @click="postPassword">
     </div>
 </template>
 
 <script>
-import PageHeader from '@/components/PageHeader'
-import PageFooter from '@/components/PageFooter'
 export default {
     data(){
         return{
@@ -52,9 +46,6 @@ export default {
             })
             .catch(() => alert('emailとpasswordのどちらかまたは両方が間違っています'))
         }
-    },
-    components:{
-        PageHeader,PageFooter
-    },
+    }
 }
 </script>

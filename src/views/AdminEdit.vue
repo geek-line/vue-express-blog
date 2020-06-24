@@ -1,7 +1,5 @@
 <template>
-<div class="basic-page">
-    <page-header/>
-    <div class='edit-container'>
+    <div>
         <div v-if="isFound">
             <h1>This is an edit page</h1>
             <p>{{ contentId }}</p>
@@ -22,13 +20,9 @@
             <h1>お探しのページは見つかりません</h1>
         </div>
     </div>
-    <page-footer></page-footer>
-</div>
 </template>
 
 <script>
-import PageHeader from '@/components/PageHeader'
-import PageFooter from '@/components/PageFooter'
 import Editor from '@tinymce/tinymce-vue'
 export default {
     data(){
@@ -79,7 +73,7 @@ export default {
         }
     },
     components:{
-        PageHeader,Editor,PageFooter
+        Editor
     }
 }
 </script>

@@ -1,7 +1,6 @@
 <template>
-    <div class="basic-page">
-        <page-header></page-header>
-        <div class="container" v-if="isFound">
+    <div>
+        <div v-if="isFound">
             <h1>{{ title }}</h1>
             <hr>
             <div id='content' v-html="content"></div>
@@ -9,13 +8,10 @@
         <div v-else>
             <h1>お探しのページは見つかりません</h1>
         </div>
-        <page-footer></page-footer>
     </div>
 </template>
 
 <script>
-import PageHeader from '@/components/PageHeader'
-import PageFooter from '@/components/PageFooter'
 export default {
     data(){
         return{
@@ -42,9 +38,6 @@ export default {
                 this.isFound = false
             })
         }
-    },
-    components:{
-        PageHeader,PageFooter,
     }
 }
 </script>
