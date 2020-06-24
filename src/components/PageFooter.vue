@@ -1,8 +1,8 @@
 <template>
-    <div id="nav">
-        <h2>vue-expressとは</h2>
-        <p>Vue.jsとExpress.jsで作成したSPAのブログアプリです。</p>
-    </div>
+  <div id="nav">
+    <h2>vue-expressとは</h2>
+    <p>Vue.jsとExpress.jsで作成したSPAのブログアプリです。</p>
+  </div>
 </template>
 
 <style scoped>
