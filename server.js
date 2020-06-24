@@ -37,7 +37,7 @@ app.get('/', (req, res) => res.sendFile(__dirname + '/dist/index.html'))
 
 app.route('/api/admin/articles')
     .get(function (req, res, next) {
-        if (Boolean(req.session.authenticated)) {
+        if (req.session.authenticated) {
             next()
         } else {
             res.sendStatus(403)
@@ -51,7 +51,7 @@ app.route('/api/admin/articles')
         })
     })
     .post(function (req, res, next) {
-        if (Boolean(req.session.authenticated)) {
+        if (req.session.authenticated) {
             next()
         } else {
             res.sendStatus(403)
@@ -68,7 +68,7 @@ app.route('/api/admin/articles')
 
 app.route('/api/admin/articles/:id')
     .get(function (req, res, next) {
-        if (Boolean(req.session.authenticated)) {
+        if (req.session.authenticated) {
             next()
         } else {
             res.sendStatus(403)
@@ -87,7 +87,7 @@ app.route('/api/admin/articles/:id')
         })
     })
     .put(function (req, res, next) {
-        if (Boolean(req.session.authenticated)) {
+        if (req.session.authenticated) {
             next()
         } else {
             res.sendStatus(403)
@@ -103,7 +103,7 @@ app.route('/api/admin/articles/:id')
         })
     })
     .delete(function (req, res, next) {
-        if (Boolean(req.session.authenticated)) {
+        if (req.session.authenticated) {
             next()
         } else {
             res.sendStatus(403)
@@ -138,7 +138,7 @@ app.route('/api/admin/login')
 
 app.route('/api/admin/articles/is_published/:id')
     .put(function (req, res, next) {
-        if (Boolean(req.session.authenticated)) {
+        if (req.session.authenticated) {
             next()
         } else {
             res.sendStatus(403)
@@ -153,7 +153,7 @@ app.route('/api/admin/articles/is_published/:id')
         })
     })
     .delete(function (req, res, next) {
-        if (Boolean(req.session.authenticated)) {
+        if (req.session.authenticated) {
             next()
         } else {
             res.sendStatus(403)
@@ -170,7 +170,7 @@ app.route('/api/admin/articles/is_published/:id')
 
 app.get('/api/admin/auth', (req, res) => {
     let isLogin = false
-    if (Boolean(req.session.authenticated)) {
+    if (req.session.authenticated) {
         isLogin = true
     } 
     res.send(isLogin)
