@@ -22,7 +22,7 @@ export default {
     }
   },
   created() {
-    this.contentId = this.$route.path.slice('/articles/'.length)
+    this.contentId = this.$route.params.id
     this.getArticle()
   },
   methods: {

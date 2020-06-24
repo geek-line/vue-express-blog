@@ -43,7 +43,7 @@ export default {
     this.axios
       .get('/api/admin/auth')
       .catch(() => this.$router.push({ name: 'adminLogin' }))
-    this.contentId = this.$route.path.slice('/admin/articles/'.length)
+    this.contentId = this.$route.params.id
     this.getArticle()
   },
   methods: {
