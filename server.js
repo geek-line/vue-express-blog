@@ -1,19 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const mysql = require('mysql')
-const session = require('cookie-session')
+const http = require('http');
+const session = require('cookie-session');
 const app = express()
 require('dotenv').config()
 const env = process.env
-
-function createConnection() {
-    return mysql.createConnection({
-        host: 'localhost',
-        user: env.MYSQL_USER,
-        password: env.MYSQL_PASSWORD,
-        database: env.MYSQL_DATABASE
-    });
-}
 
 app.use(session({
     secret: env.SESSION_PWD,
@@ -42,13 +33,22 @@ app.route('/api/admin/articles')
         } else {
             res.sendStatus(403)
         }
-    }, (req, res, ) => {
-        const connection = createConnection()
-        connection.query('SELECT id, title, is_published FROM articles', function (error, results, fields) {
-            if (error) throw error;
-            res.send(results);
-            connection.destroy()
-        })
+    }, (req, res,) => {    
+            const options = {
+                host: 'localhost',
+                port: 5000,
+                path: '/articles',
+                method: 'GET'
+            };
+            http.request(options, function (response) {
+                let str = '';
+                response.on('data', function (chunk) {
+                    str += chunk;
+                });
+                response.on('end', function () {
+                    res.send(str);
+                })
+            }).end();
     })
     .post(function (req, res, next) {
         if (req.session.authenticated) {
@@ -57,13 +57,24 @@ app.route('/api/admin/articles')
             res.sendStatus(403)
         }
     }, (req, res) => {
-        const connection = createConnection()
-        let form = JSON.parse(req.body.json)
-        connection.query('INSERT INTO articles SET ?', form, function (error, results, fields) {
-            if (error) throw error;
-            res.send(results[0]);
-            connection.destroy()
-        })
+            const options = {
+                host: 'localhost',
+                port: 5000,
+                path: '/articles',
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'}
+            };
+            const jsonReq = http.request(options, function (response) {
+                let str = '';
+                response.on('data', function (chunk) {
+                    str += chunk;
+                });
+                response.on('end', function () {
+                    res.send(str);
+                })
+            });
+            jsonReq.write(req.body.json);
+            jsonReq.end();
     })
 
 app.route('/api/admin/articles/:id')
@@ -74,17 +85,21 @@ app.route('/api/admin/articles/:id')
             res.sendStatus(403)
         }
     }, (req, res) => {
-        const connection = createConnection()
-        const id = req.params.id
-        connection.query('SELECT id, title, content FROM articles WHERE id = ?', id, function (error, results, fields) {
-            if (error) throw error;
-            if (!results[0]) {
-                res.sendStatus(404)
-                return
-            }
-            res.send(results[0]);
-            connection.destroy()
-        })
+            const options = {
+                host: 'localhost',
+                port: 5000,
+                path: '/articles/' + req.params.id,
+                method: 'GET'
+            };
+            http.request(options, function (response) {
+                let str = '';
+                response.on('data', function (chunk) {
+                    str += chunk;
+                });
+                response.on('end', function () {
+                    res.send(str);
+                })
+            }).end();
     })
     .put(function (req, res, next) {
         if (req.session.authenticated) {
@@ -93,14 +108,25 @@ app.route('/api/admin/articles/:id')
             res.sendStatus(403)
         }
     }, (req, res) => {
-        const connection = createConnection()
-        const id = req.params.id
-        let form = JSON.parse(req.body.json)
-        connection.query('UPDATE articles SET ? WHERE id = ?', [form, id], function (error, results, fields) {
-            if (error) throw error;
-            res.send(results[0]);
-            connection.destroy()
-        })
+            const id = req.params.id;
+            const options = {
+                host: 'localhost',
+                port: 5000,
+                path: '/articles/' + id,
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' }
+            };
+            const jsonReq = http.request(options, function (response) {
+                let str = '';
+                response.on('data', function (chunk) {
+                    str += chunk;
+                });
+                response.on('end', function () {
+                    res.send(str);
+                })
+            });
+            jsonReq.write(req.body.json);
+            jsonReq.end();
     })
     .delete(function (req, res, next) {
         if (req.session.authenticated) {
@@ -109,13 +135,22 @@ app.route('/api/admin/articles/:id')
             res.sendStatus(403)
         }
     }, (req, res) => {
-        const connection = createConnection()
-        const id = req.params.id
-        connection.query('DELETE FROM articles WHERE id = ?', id, function (error, results, fields) {
-            if (error) throw error;
-            res.send(results[0]);
-            connection.destroy()
-        })
+            const id = req.params.id;
+            const options = {
+                host: 'localhost',
+                port: 5000,
+                path: '/articles/' + id,
+                method: 'DELETE',
+            };
+            const jsonReq = http.request(options, function (response) {
+                let str = '';
+                response.on('data', function (chunk) {
+                    str += chunk;
+                });
+                response.on('end', function () {
+                    res.send(str);
+                })
+            }).end();
     })
 
 app.route('/api/admin/login')
@@ -123,49 +158,28 @@ app.route('/api/admin/login')
         return res.send(Boolean(req.session.authenticated))
     })
     .post((req, res) => {
-        const connection = createConnection()
-        let form = JSON.parse(req.body.json)
-        connection.query('SELECT email, password FROM admin_users WHERE email = ? AND password = ?', [form.email, form.password], function (error, results, fields) {
-            if (error) throw error;
-            if (!results[0]) {
-                res.sendStatus(404)
-                return
-            }
-            req.session.authenticated = true
-            res.send(req.session.authenticated);
-        })
-    })
-
-app.route('/api/admin/articles/is_published/:id')
-    .put(function (req, res, next) {
-        if (req.session.authenticated) {
-            next()
-        } else {
-            res.sendStatus(403)
-        }
-    }, (req, res) => {
-        const connection = createConnection()
-        const id = req.params.id
-        connection.query('UPDATE articles SET is_published = true WHERE id = ?', id, function (error, result, filelds) {
-            if (error) throw error;
-            res.send("ok");
-            connection.destroy()
-        })
-    })
-    .delete(function (req, res, next) {
-        if (req.session.authenticated) {
-            next()
-        } else {
-            res.sendStatus(403)
-        }
-    }, (req, res) => {
-        const connection = createConnection()
-        const id = req.params.id
-        connection.query('UPDATE articles SET is_published = false WHERE id = ?', id, function (error, result, filelds) {
-            if (error) throw error;
-            res.send("ok");
-            connection.destroy()
-        })
+        let form = JSON.parse(req.body.json);
+        const options = {
+            host: 'localhost',
+            port: 5000,
+            path: '/admin_users?email=' + form.email + "&password=" + form.password,
+            method: 'GET'
+        };
+        http.request(options, function (response) {
+            let str = '';
+            response.on('data', function (chunk) {
+                str += chunk;
+            });
+            response.on('end', function () {
+                let obj = JSON.parse(str);
+                if (obj[0] === undefined) {
+                    res.sendStatus(404)
+                    return
+                }
+                req.session.authenticated = true;
+                res.send(req.session.authenticated);
+            })
+        }).end();
     })
 
 app.get('/api/admin/auth', (req, res) => {
@@ -182,30 +196,39 @@ app.get('/api/admin/logout', (req, res) => {
 })
 
 app.get('/api/user/articles', (req, res) => {
-    const connection = createConnection()
-    connection.query('SELECT id, title, created_at FROM articles WHERE is_published = true', function (error, results, fields) {
-        if (error) throw error;
-        if (!results) {
-            res.sendStatus(404)
-            return
-        }
-        res.send(results);
-        connection.destroy()
-    })
+    const options = {
+        host: 'localhost',
+        port: 5000,
+        path: '/articles',
+        method: 'GET'
+    };
+    http.request(options, function (response) {
+        let str = '';
+        response.on('data', function (chunk) {
+            str += chunk;
+        });
+        response.on('end', function () {
+            res.send(str);
+        })
+    }).end();
 })
 
 app.get('/api/user/articles/:id', (req, res) => {
-    const connection = createConnection()
-    const id = req.params.id
-    connection.query('SELECT id, title, content, created_at FROM articles WHERE id = ? AND is_published = true', id, function (error, results, fields) {
-        if (error) throw error;
-        if (!results[0]) {
-            res.sendStatus(404)
-            return
-        }
-        res.send(results[0]);
-        connection.destroy()
-    })
+    const options = {
+        host: 'localhost',
+        port: 5000,
+        path: '/articles/' + req.params.id,
+        method: 'GET'
+    };
+    http.request(options, function (response) {
+        let str = '';
+        response.on('data', function (chunk) {
+            str += chunk;
+        });
+        response.on('end', function () {
+            res.send(str);
+        })
+    }).end();
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))

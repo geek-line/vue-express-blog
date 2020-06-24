@@ -1,12 +1,26 @@
 {
-    "admin_users":[
-        {
-            "id":1,
-            "email":"admin@mail.com",
-            "password":"password"
-        }
-    ],
-    "articles":[
-        
-    ]
+  "admin_users": [
+    {
+      "id": 1,
+      "email": "admin@mail.com",
+      "password": "password"
+    }
+  ],
+  "articles": [
+    {
+      "title": "サンプル",
+      "content": "<p>フガフガ</p>",
+      "id": 1
+    },
+    {
+      "title": "亜sdfあsdf",
+      "content": "<p>亜sdf亜sdfあsdf</p>",
+      "id": 2
+    },
+    {
+      "title": "ホゲホゲ",
+      "content": "<p>これはサンプルです</p>\n<h2>フガフガ</h2>",
+      "id": 3
+    }
+  ]
 }

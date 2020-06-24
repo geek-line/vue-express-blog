@@ -5,7 +5,6 @@
             <h2>掲載記事一覧</h2>
             <div class="card-wrapper" v-for="article in articles" :key="article.id">
                 <router-link class="title" :to="{name:'userDetail',params:{id:article.id}}">{{ article.title }}</router-link>
-                <p>作成日:{{ article.created_at }}</p>
             </div>
         </div>
         <page-footer></page-footer>
@@ -21,7 +20,6 @@ export default {
             articles: [{
                 id : 0,
                 title: 'サンプル',
-                createdAt: ''
             },]
         }
     },
