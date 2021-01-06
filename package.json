@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^3.2.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "cookie-session": "^1.4.0",
     "core-js": "^2.6.5",
     "cors": "^2.8.5",
