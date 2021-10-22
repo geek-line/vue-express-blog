@@ -16,7 +16,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mysql": "^2.18.1",
-    "tinymce": "^5.2.2",
+    "tinymce": "^5.9.0",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.5",
     "vue-router": "^3.0.3"
